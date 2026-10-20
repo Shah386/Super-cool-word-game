@@ -3,18 +3,15 @@
  Simple word game
  Here we go
 """
-import random
+from tkinter import *
 import tkinter as tk
-from tkinter import messagebox
-from tkinter import ttk
-import time
+import random
+
 
 lives = 5
 
 
 def simple_word_game():
-    count = 0
-    Win = False
 
     with open("text.txt", "r", encoding="utf-8") as file:
         content = file.read().split()
@@ -29,7 +26,6 @@ def simple_word_game():
     label.pack()
     entry_answer = tk.Entry(root)
     entry_answer.pack()
-
     status_label = tk.Label(root, text="Start Game", font=("Arial", 12))
     status_label.pack()
     lives_label = tk.Label(root, text=lives, font=("Arial", 12))
