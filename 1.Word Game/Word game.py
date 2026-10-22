@@ -1,12 +1,15 @@
-"""" 
+""""
  First project for Terra
  Simple word game
  Here we go
 """
-from tkinter import *
-import tkinter as tk
-import random
 
+import tkinter as tk
+from tkinter import *
+from tkinter import ttk
+from tkinter.ttk import *
+import random
+from PIL import Image, ImageTk  # Imported from Pillow!
 
 lives = 5
 
@@ -21,14 +24,25 @@ def simple_word_game():
     # Tkinter
     root = tk.Tk()
     root.title("Simple Word Game")
-    root.geometry("400x300")
-    label = tk.Label(root, text="The Simple Word Game", font=("Arial", 16))
+    root.geometry("400x500")
+    game_icon = tk.PhotoImage(
+        file=r"C:\Users\14165\OneDrive\Desktop\Word Game!\1.Word Game\nyt-wordle.png")
+    root.iconphoto(False, game_icon)
+    label = ttk.Label(root, text="The Simple Word Game",
+                      font=("Times New Roman", 16))
     label.pack()
-    entry_answer = tk.Entry(root)
+    empty_gridoneO = Image.open(
+        r"C:\Users\14165\OneDrive\Desktop\Word Game!\1.Word Game\Empty sprite.png")
+    empty_gridoneOR = empty_gridoneO.resize((70, 70), Image.Resampling.LANCZOS)
+    empty_gridoneT = ImageTk.PhotoImage(empty_gridoneOR)
+    image_label = tk.Label(root, image=empty_gridoneT)
+    image_label.image = empty_gridoneT
+    image_label.pack()
+    entry_answer = ttk.Entry(root)
     entry_answer.pack()
-    status_label = tk.Label(root, text="Start Game", font=("Arial", 12))
+    status_label = ttk.Label(root, text="Start Game", font=("Arial", 12))
     status_label.pack()
-    lives_label = tk.Label(root, text=lives, font=("Arial", 12))
+    lives_label = ttk.Label(root, text=lives, font=("Arial", 12))
     lives_label.pack()
 
     def on_button_click():
@@ -53,7 +67,7 @@ def simple_word_game():
                     lives_label.config(text=lives)
         else:
             print("You ran out of lives!")
-    funnyButton = tk.Button(root, text="funy button", command=on_button_click)
+    funnyButton = ttk.Button(root, text="funy button", command=on_button_click)
     funnyButton.pack()
     root.mainloop()
 
