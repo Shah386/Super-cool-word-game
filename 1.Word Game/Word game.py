@@ -7,6 +7,7 @@
 import os
 import tkinter as tk
 import random
+import sys
 from tkinter import font as tkfont
 import pyglet
 from tkinter import *
@@ -31,10 +32,7 @@ player_rows = 1
 
 
 def simple_word_game():
-    global coloumns
-    global player_rows
-    global xpos
-    global ypos
+    global coloumns, player_rows, xpos, ypos, lives
     with open("text.txt", "r", encoding="utf-8") as file:
         content = file.read().split()
         print(content)
@@ -47,14 +45,8 @@ def simple_word_game():
     root.resizable(False, False)
 
     def restart_program():
-        for widget in root.winfo_children():
-            widget.destroy()
-
-        redo_label = tk.Label(root, text="application running")
-        redo_label.place(x=400, y=500)
-        restart_btn = ttk.Button(
-            root, text="Restart Program", command=restart_program)
-        restart_btn.place(x=400, y=500)
+        root.destroy()
+        os.execl(sys.executable, sys.executable, *sys.argv)
     # Game Icon
     game_icon = tk.PhotoImage(
         file=r"C:\Users\14165\OneDrive\Desktop\Word Game!\1.Word Game\nyt-wordle.png")
@@ -70,8 +62,11 @@ def simple_word_game():
     # watermark
     intro_watermark = tk.Label(
         root, text="made by \n Shah", anchor="center", bg="#ADD8E6", fg="#FFAC1C", font="augiepixel")
-    intro_watermark.place(x=380, y=900)
+    intro_watermark.place(x=360, y=900)
     # Widgets
+    top_label = tk.Label(root, text="The Simple Word Game",
+                         font=("augiepixel", 30), bg="#ADD8E6",  fg="#FFAC1C", anchor="center")
+    top_label.place(x=230, y=10)
     entry_answer = tk.Entry(root)
     entry_answer.place(x=400, y=100, anchor="center")
     status_label = tk.Label(root, text="Start Game",
@@ -80,7 +75,12 @@ def simple_word_game():
     lives_label = tk.Label(root, text=f"Lives: {lives}", font=(
         "augiepixel", 30), bg="#ADD8E6", fg="#FFAC1C")
     lives_label.place(x=400, y=140, anchor="center")
-
+    hint_label = tk.Label(root, text="_____________",
+                          font=("augiepixel", 30), bg="#ADD8E6",  fg="#FFAC1C", anchor="center")
+    hint_label.place(x=300, y=800)
+    word_label = tk.Label(root, text=content, font=(
+        "augiepixel", 10), bg="#ADD8E6",  fg="#FFAC1C", wraplength=350, anchor="center")
+    word_label.place(x=220, y=930)
     # The Empty Grid
     grid_frame = tk.Frame(root)
     grid_frame.pack(expand=True, side="top", pady=150, anchor="n")
@@ -147,6 +147,7 @@ def simple_word_game():
 
     def on_button_click():
         global lives
+        ansletters = list(special_word)
         answer = entry_answer.get()
         answer = answer.upper()
         makeletters(answer)
@@ -161,15 +162,23 @@ def simple_word_game():
             else:
                 if answer == special_word:
                     status_label.config(
-                        text="Correct!", bg="#ADD8E6", fg="#FFAC1C")
+                        text="Correct!", bg="#ADD8E6", fg="#00F700")
+                    restart_button = tk.Button(root, text="Exit", command=restart_program,
+                                               bg="#ADD8E6", fg="#FFAC1C", anchor="center", font="augiepixel")
+                    restart_button.place(x=400, y=900)
                 else:
                     status_label.config(text="Incorrect!",
-                                        bg="#ADD8E6", fg="#FFAC1C")
+                                        bg="#ADD8E6", fg="#EE4B2B")
                     lives -= 1
                     lives_label.config(text=lives)
-
+                    count = 0
+                    hint = random.choice(ansletters)
+                    hint_label.config(text=f"Word Contains {hint}")
         else:
-            print("You ran out of lives!")
+            status_label.config(text=f"The answer was{special_word}")
+            restart_button = tk.Button(
+                root, text="Exit", command=restart_program, bg="#ADD8E6", fg="#FFAC1C", anchor="center", font="augiepixel")
+            restart_button.place(x=400, y=900)
 
     funnyButton = ttk.Button(root, text="Answer", command=on_button_click)
     funnyButton.place(x=400, y=250, anchor="center")
