@@ -2,6 +2,7 @@
  First project for Terra
  Simple word game
  Here we go
+ Its done!
 """
 # Tomorrow, Try to fix the letter system
 import os
